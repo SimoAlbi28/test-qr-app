@@ -41,20 +41,14 @@ h2 {
 }
 
 #buttons-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(70px, 130px));
+  grid-template-rows: repeat(2, 40px);
+  gap: 12px 20px;
   justify-content: center;
-  gap: 8px;
-  flex-wrap: nowrap;
-  align-items: center;
-  margin-bottom: 25px;
-  max-width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  overflow-x: auto;
-  padding: 0 5px;
+  max-width: 280px; /* o quanto vuoi per tenerli stretti */
+  margin: 0 auto 25px auto;
 }
-
 .row-btns {
   display: flex;
   gap: 8px;
@@ -717,13 +711,13 @@ button {
 }
 
 #btn-home,
+#create-macchinario,
 #start-scan,
-#stop-scan,
-#create-macchinario {
-  font-size: 13px;
-  padding: 6px 12px;
-  min-width: 90px;
+#stop-scan {
+  min-width: 70px;
   max-width: 130px;
+  font-size: 13px;
+  padding: 6px 10px;
   height: 36px;
   box-sizing: border-box;
 }

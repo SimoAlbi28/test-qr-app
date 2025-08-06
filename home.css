@@ -52,11 +52,6 @@ h1 {
   border: 2px solid gray;
 }
 
-.folder:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 20px rgba(0, 123, 255, 0.4);
-}
-
 /* Immagine */
 .folder-icon {
   width: 80px;
@@ -139,10 +134,6 @@ h1 {
   width: 100%;
   display: block;
   margin: 0 auto 20px auto;
-}
-
-#btn-add-folder:hover {
-  background-color: #0056b3;
 }
 
 /* Responsive: 2 colonne su mobile */

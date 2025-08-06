@@ -598,9 +598,14 @@ startBtn.addEventListener("click", () => {
 
   Html5Qrcode.getCameras().then(cameras => {
     if (cameras && cameras.length) {
-      // Cerca camera con facingMode "environment" (posteriore)
-      const cameraRear = cameras.find(cam => cam.label.toLowerCase().includes("back") || cam.label.toLowerCase().includes("rear"));
-      const cameraId = cameraRear ? cameraRear.id : cameras[0].id;
+      // Prova a prendere una camera posteriore se disponibile
+      const backCam = cameras.find(cam =>
+        cam.label.toLowerCase().includes("back") ||
+        cam.label.toLowerCase().includes("post") ||
+        cam.label.toLowerCase().includes("rear")
+      );
+
+      const cameraId = backCam ? backCam.id : cameras[0].id;
 
       html5QrCode.start(
         cameraId,
@@ -609,10 +614,9 @@ startBtn.addEventListener("click", () => {
           gestioneScan(qrCodeMessage);
         },
         errorMessage => {
-          // error scanning
+          // errore di scansione (puoi anche ignorare)
         }
-      )
-      .catch(err => {
+      ).catch(err => {
         alert(`Errore avvio scansione: ${err}`);
         startBtn.disabled = false;
         stopBtn.disabled = true;
@@ -635,11 +639,10 @@ startBtn.addEventListener("click", () => {
 stopBtn.addEventListener("click", () => {
   if (html5QrCode) {
     html5QrCode.stop().then(() => {
+      html5QrCode.clear();
+      reader.classList.add("hidden");
       startBtn.disabled = false;
       stopBtn.disabled = true;
-      reader.classList.add("hidden");
-    }).catch(err => {
-      alert(`Errore stop scansione: ${err}`);
     });
   }
 });

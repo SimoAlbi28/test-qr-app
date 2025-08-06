@@ -775,16 +775,18 @@ button {
 }
 
 #btn-home,
-#create-macchinario,
-#start-scan,
-#stop-scan {
-  min-width: 90px;
-  max-width: 150px;
-  font-size: 13px;
-  padding: 6px 10px;
-  height: 36px;
+.btn-green,
+.btn-red,
+.btn-blue {
+  min-width: 75px;
+  max-width: 110px;
+  font-size: 12px;
+  padding: 5px 8px;
+  height: auto;
   box-sizing: border-box;
+  white-space: nowrap;
 }
+
 
 #btn-conferma,
 #btn-annulla,

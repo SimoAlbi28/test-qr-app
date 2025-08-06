@@ -129,6 +129,32 @@ button {
   flex-wrap: wrap;
 }
 
+/* Qui modifico .btns-macchinario per far andare i bottoni 2x2 su mobile */
+.btns-macchinario {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap; /* fa andare i bottoni a capo */
+}
+
+.btns-macchinario button {
+  flex: 1 1 45%; /* larghezza flessibile per 2 per riga */
+  max-width: 140px;
+  box-sizing: border-box;
+}
+
+@media(min-width: 480px) {
+  .btns-macchinario {
+    flex-wrap: nowrap;
+  }
+
+  .btns-macchinario button {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+}
+
 #btn-home {
   background-color: #ffffff;
   color: rgb(0, 0, 0);
@@ -359,6 +385,7 @@ button {
   justify-content: center;
   gap: 10px;
   margin-top: 8px;
+  flex-wrap: wrap;
 }
 
 #search-box {
@@ -411,7 +438,7 @@ button {
 }
 
 #show-all-btn:hover {
-  background-color: #2980b9;
+  background-color: rgb(150, 106, 255);
 }
 
 .modal {
@@ -520,16 +547,13 @@ button {
   background-color: #64170d; /* rosso scuro */
 }
 
-
 .btn-indietro {
   background-color: #f87800; /* arancio */
 }
 
-
 .btn-copia-selezionate {
   background-color: #cb08fc; /* rosa */
 }
-
 
 /* Checkbox per selezione note */
 .checkbox-copia-note {
@@ -580,17 +604,12 @@ button {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Usa un trucco CSS per cambiare stile del li quando checkbox è checked */
 .note-list li input[type="checkbox"]:checked {
   /* serve solo a triggerare il selettore */
 }
 
-/* Usa un trucco CSS per cambiare stile del li quando checkbox è checked */
-.note-list li input[type="checkbox"]:checked ~ div,
-.note-list li input[type="checkbox"]:checked ~ .btns-note {
-  /* opzionale se vuoi stilizzare testo o bottoni */
-}
-
-/* Il vero cambio di bordo esterno al li con :has() se browser supporta */
+/* Usa :has() per cambiare bordo esterno se browser supporta */
 .note-list li:has(input[type="checkbox"]:checked) {
   border-color: #444;
   box-shadow: 0 0 8px rgba(0,0,0,0.3);
@@ -623,4 +642,3 @@ button {
   border: 1px solid black !important;
   border-radius: 5px !important;
 }
-

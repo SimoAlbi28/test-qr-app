@@ -55,7 +55,7 @@ function renderFolders() {
 }
 
 btnAddFolder.onclick = () => {
-  const anno = prompt("Inserisci l'anno della cartella (es. 2023):")?.trim();
+  const anno = prompt("Inserire nome cartella (Anno):")?.trim();
   if (!anno || !/^\d{4}$/.test(anno)) {
     alert("Anno non valido. Usa 4 cifre, es: 2023");
     return;

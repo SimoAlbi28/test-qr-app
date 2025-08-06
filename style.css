@@ -10,8 +10,10 @@ body {
   min-height: 100vh;
   justify-content: flex-start;
   align-items: center;
+  box-sizing: border-box; /* aggiunto per sicurezza */
 }
 
+/* TITOLI */
 #tit1 {
   color: white;
   background-color: black;
@@ -40,14 +42,28 @@ h2 {
   user-select: none;
 }
 
+/* CONTAINER BOTTONI PRINCIPALI */
 #buttons-container {
   display: grid;
   grid-template-columns: repeat(2, minmax(90px, 150px));
   grid-template-rows: repeat(2, 40px);
   gap: 12px 20px;
   justify-content: center;
-  max-width: 320px; /* più largo per non tagliare */
+  max-width: 100vw; /* da 320px a full viewport width per evitare overflow */
   margin: 0 auto 25px auto;
+  padding: 0 10px; /* padding per evitare che tocchi bordi schermo */
+  box-sizing: border-box;
+  overflow-x: hidden; /* niente scroll orizzontale */
+}
+
+/* media query per schermi piccoli - meglio flex per botttoni */
+@media (max-width: 480px) {
+  #buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 15px;
+    justify-content: center;
+  }
 }
 
 .row-btns {
@@ -58,8 +74,7 @@ h2 {
   justify-content: center;
 }
 
-/* Bottoni home, crea, avvia, chiudi più piccoli e affiancati */
-
+/* BOTTONI */
 #btn-home {
   background-color: #ffffff;
   color: rgb(0, 0, 0);
@@ -72,6 +87,7 @@ h2 {
   white-space: nowrap;
   user-select: none;
   text-align: center;
+  box-sizing: border-box;
 }
 
 #btn-home:hover {
@@ -93,6 +109,7 @@ h2 {
   transition: background-color 0.3s ease;
   margin: 0 auto;
   white-space: nowrap;
+  box-sizing: border-box;
 }
 
 #start-scan {
@@ -155,8 +172,10 @@ h2 {
   font-size: 13px;
   transition: background-color 0.3s ease;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
+/* bottone crea manuale */
 #btn-create-manual {
   margin-top: 12px;
   background-color: #3498db;
@@ -170,6 +189,7 @@ h2 {
   max-width: 130px;
   font-size: 13px;
   transition: background-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 #btn-create-manual:hover {
@@ -187,6 +207,7 @@ button {
   min-width: 60px;
   max-width: 130px;
   transition: background-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 /* Bottone e container per i bottoni macchinario - fix overflow */
@@ -216,6 +237,7 @@ button {
   }
 }
 
+/* stile generico per toggle, note, scan buttons */
 .toggle-btn,
 .btns-note button,
 .note-form button,
@@ -226,6 +248,7 @@ button {
   min-width: 50px;
   max-width: 110px;
   border: 1px solid black;
+  box-sizing: border-box;
 }
 
 .btns-note,
@@ -237,6 +260,7 @@ button {
   flex-wrap: wrap;
 }
 
+/* bottoni home */
 #btn-home {
   background-color: #ffffff;
   color: rgb(0, 0, 0);
@@ -244,6 +268,7 @@ button {
   border: 1px solid black;
   min-width: 85px;
   text-align: center;
+  box-sizing: border-box;
 }
 
 #btn-home:hover {
@@ -253,12 +278,14 @@ button {
 #btn-chiudi {
   background-color: #e67e22;
   color: white;
+  box-sizing: border-box;
 }
 
 .btn-red {
   background-color: #e74c3c;
   color: white;
   border: 1px solid black;
+  box-sizing: border-box;
 }
 
 .btn-red:hover {
@@ -269,6 +296,7 @@ button {
   background-color: #2ecc71;
   color: white;
   border: 1px solid black;
+  box-sizing: border-box;
 }
 
 .btn-green:hover {
@@ -280,6 +308,7 @@ button {
   border: 1px solid black;
   background-color: #3498db;
   color: white;
+  box-sizing: border-box;
 }
 
 .btn-blue:hover {
@@ -290,6 +319,7 @@ button {
   background-color: orange;
   color: white;
   border: 1px solid black;
+  box-sizing: border-box;
 }
 
 .btn-orange:hover {
@@ -300,12 +330,14 @@ button {
   width: 100%;
   max-width: 350px;
   margin: 0 auto 30px;
+  box-sizing: border-box;
 }
 
 #macchinari-list {
   width: 100%;
   max-width: 400px;
   margin: 0 auto 30px;
+  box-sizing: border-box;
 }
 
 .macchinario {
@@ -319,6 +351,7 @@ button {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   margin-bottom: 18px;
   box-shadow: 0 2px 8px rgba(0,123,255,0.1);
+  box-sizing: border-box;
 }
 
 .macchinario.highlight {
@@ -337,11 +370,13 @@ button {
   padding: 5px 10px;
   border-radius: 6px;
   border: 2px solid black;
+  box-sizing: border-box;
 }
 
 .nome-e-btn {
   gap: 15px;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .toggle-btn {
@@ -354,6 +389,7 @@ button {
   border-radius: 6px;
   user-select: none;
   transition: background-color 0.2s ease;
+  box-sizing: border-box;
 }
 
 .note-list {
@@ -364,6 +400,7 @@ button {
   margin-left: auto;
   margin-right: auto;
   text-align: left;
+  box-sizing: border-box;
 }
 
 .note-list li {
@@ -389,11 +426,13 @@ button {
   border-radius: 6px;
   display: inline-block;
   margin-bottom: 6px;
+  box-sizing: border-box;
 }
 
 .nota-desc {
   margin-top: 6px;
   white-space: pre-wrap;
+  box-sizing: border-box;
 }
 
 .btns-note {
@@ -402,11 +441,13 @@ button {
   right: 8px;
   display: flex;
   gap: 6px;
+  box-sizing: border-box;
 }
 
 .btns-note button.btn-blue {
   background-color: #3498db;
   color: white;
+  box-sizing: border-box;
 }
 
 .btns-note button.btn-blue:hover {
@@ -416,6 +457,7 @@ button {
 .btns-note button.btn-red {
   background-color: #e74c3c;
   color: white;
+  box-sizing: border-box;
 }
 
 .btns-note button.btn-red:hover {
@@ -429,6 +471,7 @@ button {
   max-width: 350px;
   margin: 0 auto 10px;
   text-align: left;
+  box-sizing: border-box;
 }
 
 .note-form label {
@@ -437,6 +480,7 @@ button {
   text-align: center;
   width: 100%;
   display: block;
+  box-sizing: border-box;
 }
 
 .note-form input[type="date"] {
@@ -502,6 +546,7 @@ button {
   margin: 20px auto 10px;
   max-width: 95%;
   width: fit-content;
+  box-sizing: border-box;
 }
 
 #search-box label {
@@ -509,6 +554,7 @@ button {
   user-select: none;
   white-space: nowrap;
   font-size: 15px;
+  box-sizing: border-box;
 }
 
 #search-input {
@@ -521,6 +567,7 @@ button {
   border-radius: 8px;
   outline: none;
   transition: border-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 #search-input:focus {
@@ -536,6 +583,7 @@ button {
   color: white;
   cursor: pointer;
   user-select: none;
+  box-sizing: border-box;
 }
 
 #show-all-btn:hover {
@@ -550,6 +598,7 @@ button {
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  box-sizing: border-box;
 }
 
 .modal.hidden {
@@ -563,12 +612,14 @@ button {
   min-width: 280px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.25);
   text-align: center;
+  box-sizing: border-box;
 }
 
 .modal-content label {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
+  box-sizing: border-box;
 }
 
 .modal-content input[type="text"] {
@@ -590,16 +641,19 @@ button {
   display: flex;
   justify-content: center;
   gap: 15px;
+  box-sizing: border-box;
 }
 
 .modal-buttons button {
   min-width: 90px;
+  box-sizing: border-box;
 }
 
 .line-separator {
   height: 2px;
   background-color: black;
   margin: 12px 0;
+  box-sizing: border-box;
 }
 
 .titolo-note {
@@ -612,6 +666,7 @@ button {
   font-size: 16px;
   width: fit-content;
   margin: 10px auto 10px auto;
+  box-sizing: border-box;
 }
 
 /* ======= STILI BOTTONI COPIA NOTE PERSONALIZZATI ======= */
@@ -634,6 +689,7 @@ button {
   border: none;
   display: inline-block;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .btn-copia-note {
@@ -661,6 +717,7 @@ button {
   transform: scale(1.3);
   margin-right: 8px;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 /* Container per i 4 bottoni copia note in colonna 2x2 */
@@ -671,6 +728,7 @@ button {
   justify-content: center;
   max-width: 280px;
   margin: 10px auto 20px auto;
+  box-sizing: border-box;
 }
 
 /* Assicura che i bottoni abbiano la stessa larghezza */
@@ -687,6 +745,7 @@ button {
   right: 12px;
   transform: translateY(-50%) scale(1.3);
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 /* Quando il contenitore ha classe .modalita-copia attiva: mostra checkbox e nasconde bottoni */
@@ -702,10 +761,12 @@ button {
 .note-list li {
   border: 1px solid #ccc;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
 }
 
 .note-list li input[type="checkbox"]:checked ~ div,
 .note-list li input[type="checkbox"]:checked ~ .btns-note {
+  /* niente al momento */
 }
 
 .note-list li:has(input[type="checkbox"]:checked) {
@@ -734,10 +795,12 @@ button {
 .btn-copia-selezionate {
   border: 1px solid black;
   border-radius: 5px;
+  box-sizing: border-box;
 }
 
 #btn-chiudi,
 #btn-rin {
   border: 1px solid black !important;
   border-radius: 5px !important;
+  box-sizing: border-box;
 }

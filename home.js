@@ -3,14 +3,16 @@ const btnAddFolder = document.getElementById("btn-add-folder");
 
 let folders = JSON.parse(localStorage.getItem("folders") || "{}");
 
+// Ordina cartelle per anno decrescente
 function ordinaCartelle() {
   return Object.entries(folders).sort((a, b) => {
-    const annoA = parseInt(a[1].anno);
-    const annoB = parseInt(b[1].anno);
+    const annoA = parseInt(a[0]); // id = anno
+    const annoB = parseInt(b[0]);
     return annoB - annoA;
   });
 }
 
+// Render cartelle
 function renderFolders() {
   foldersList.innerHTML = "";
   const foldersOrdinati = ordinaCartelle();
@@ -54,6 +56,7 @@ function renderFolders() {
   });
 }
 
+// Aggiungi cartella (id = anno)
 btnAddFolder.onclick = () => {
   const anno = prompt("Inserire nome cartella (Anno):")?.trim();
   if (!anno || !/^\d{4}$/.test(anno)) {
@@ -61,15 +64,15 @@ btnAddFolder.onclick = () => {
     return;
   }
 
-  if (Object.values(folders).some(f => f.anno === anno)) {
+  if (folders.hasOwnProperty(anno)) {
     alert("Esiste già una cartella con questo anno.");
     return;
   }
 
   const nome = `Cartella ${anno}`;
-  const id = "folder-" + Math.random().toString(36).slice(2, 9);
+  const id = anno; // id = anno
 
-  folders[id] = { nome, anno, manutenzioni: [] };
+  folders[id] = { nome, anno, macchinari: {} };
   salvaCartelle();
   renderFolders();
 };
@@ -78,6 +81,7 @@ function rinominaCartella(id) {
   const nuovoNome = prompt("Nuovo nome cartella:", folders[id].nome)?.trim();
   if (!nuovoNome) return;
 
+  // Controllo se esiste nome uguale in un'altra cartella
   if (Object.entries(folders).some(([key, f]) => f.nome === nuovoNome && key !== id)) {
     alert("Nome già esistente.");
     return;
@@ -100,16 +104,24 @@ function copiaTuttoCartella(id) {
   const folder = folders[id];
   if (!folder) return;
 
-  let testo = `${folder.nome.toUpperCase()} (${folder.anno})\n\n`;
+  let testo = `${folder.nome.toUpperCase()}\n\n`; // Solo nome cartella
 
-  if (!folder.manutenzioni.length) {
-    testo += "(Nessuna manutenzione presente)\n";
+  const macchinari = folder.macchinari || {};
+
+  function formatData(data) {
+    const [yyyy, mm, dd] = data.split("-");
+    return `${dd}/${mm}/${yyyy}`;
+  }
+
+  if (Object.keys(macchinari).length === 0) {
+    testo += "(Nessun macchinario presente)\n";
   } else {
-    folder.manutenzioni.forEach(m => {
-      testo += `- ${m.nome}\n`;
-      if (m.note && m.note.length) {
-        m.note.forEach(n => {
-          testo += `   • [${n.data}]: ${n.desc}\n`;
+    Object.values(macchinari).forEach((macchinario, i) => {
+      if (i > 0) testo += "\n"; // Riga vuota sopra per staccare manutenzioni
+      testo += `• ${macchinario.nome}\n`; // Pallino per nome manutenzione
+      if (macchinario.note && macchinario.note.length) {
+        macchinario.note.forEach(n => {
+          testo += `  - [${formatData(n.data)}]: ${n.desc}\n`; // Trattino per note
         });
       }
     });
@@ -124,4 +136,5 @@ function salvaCartelle() {
   localStorage.setItem("folders", JSON.stringify(folders));
 }
 
+// Primo render
 renderFolders();

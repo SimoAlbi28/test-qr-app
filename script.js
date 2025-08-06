@@ -12,31 +12,35 @@ const btnConferma = document.getElementById("btnConferma");
 const btnAnnulla = document.getElementById("btnAnnulla");
 const erroreNome = document.getElementById("erroreNome");
 
-let searchFilter = "";
-let savedMacchinari = JSON.parse(localStorage.getItem("macchinari") || "{}");
+const urlParams = new URLSearchParams(window.location.search);
+const currentAnno = urlParams.get("id");
 
-if (!savedMacchinari || typeof savedMacchinari !== "object") {
-  savedMacchinari = {};
+let folders = JSON.parse(localStorage.getItem("folders") || "{}");
+
+// Se la cartella non esiste, blocca e torna alla home
+if (!currentAnno || !folders[currentAnno]) {
+  alert("Cartella non trovata. Torna alla home.");
+  window.location.href = "home.html";
 }
 
-// Qui resettiamo tutti a expanded = false ogni volta che si carica la pagina
+let savedMacchinari = folders[currentAnno]?.macchinari || {};
+if (!savedMacchinari) savedMacchinari = {};
+
+// Reset expanded = false ogni volta che si carica pagina
 Object.entries(savedMacchinari).forEach(([id, macch]) => {
   savedMacchinari[id].expanded = false;
 });
 
-localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+folders[currentAnno].macchinari = savedMacchinari;
+localStorage.setItem("folders", JSON.stringify(folders));
 
-
-localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
-
-// --- AGGIUNTA: MOSTRA ANNO CARTELLA SOTTO IL TITOLO ---
+// --- MOSTRA ANNO SOTTO TITOLO ---
 function mostraAnnoCartella() {
   const titoloTop = document.getElementById("titleTop");
   if (!titoloTop) return;
 
-  const annoCartella = "2025"; // qui metti anno dinamico o fisso
+  const annoCartella = currentAnno;
 
-  // Rimuovo se già c’è
   const oldAnno = document.getElementById("annoSottoTitolo");
   if (oldAnno) oldAnno.remove();
 
@@ -48,7 +52,6 @@ function mostraAnnoCartella() {
   divAnno.style.marginTop = "5px";
   divAnno.style.fontWeight = "bold";
 
-  // Inserisco subito dopo titolo
   titoloTop.insertAdjacentElement("afterend", divAnno);
 }
 
@@ -131,8 +134,8 @@ function mostraModalConferma(messaggio, onConferma, onAnnulla) {
   overlay.appendChild(box);
   document.body.appendChild(overlay);
 }
-// --- FINE MODAL ---
 
+// --- FUNZIONI UTILI ---
 function createLineSeparator() {
   const line = document.createElement("div");
   line.className = "line-separator";
@@ -259,7 +262,7 @@ function renderMacchinari(highlightId = null) {
   listContainer.innerHTML = "";
 
   const filtered = Object.entries(savedMacchinari).filter(([_, data]) =>
-    data.nome.toLowerCase().startsWith(searchFilter.toLowerCase())
+    data.nome.toLowerCase().startsWith(searchInput.value.trim().toLowerCase())
   );
 
   const sorted = filtered.sort((a, b) =>
@@ -281,13 +284,11 @@ function renderMacchinari(highlightId = null) {
       </div>
     `;
 
-    // Evento toggle btn
     box.querySelector(".toggle-btn").addEventListener("click", () => toggleDettagli(id));
 
     if (expanded) {
       box.appendChild(createLineSeparator());
 
-      // Inserimento note
       const insertNoteTitle = document.createElement("h4");
       insertNoteTitle.textContent = "Inserimento Note";
       insertNoteTitle.className = "titolo-note";
@@ -307,12 +308,10 @@ function renderMacchinari(highlightId = null) {
 
       box.appendChild(noteForm);
 
-      // Evento conferma nota
       noteForm.querySelector(`#btn-conferma-${id}`).addEventListener("click", () => aggiungiNota(id));
 
       box.appendChild(createLineSeparator());
 
-      // Lista note e area copia note solo se ci sono note
       if (data.note && data.note.length > 0) {
         const noteTitle = document.createElement("h4");
         noteTitle.textContent = "Note";
@@ -375,12 +374,10 @@ function renderMacchinari(highlightId = null) {
 
       box.appendChild(btnsContainer);
 
-      // Eventi bottoni azioni
       btnsContainer.querySelector(".btn-rinomina").addEventListener("click", () => rinominaMacchinario(id));
       btnsContainer.querySelector(".btn-chiudi").addEventListener("click", () => toggleDettagli(id));
       btnsContainer.querySelector(".btn-elimina-macchinario").addEventListener("click", () => eliminaMacchinario(id));
 
-      // Eventi bottoni note
       box.querySelectorAll(".btn-modifica").forEach(btn =>
         btn.addEventListener("click", (e) => {
           const idMod = e.currentTarget.dataset.id;
@@ -419,13 +416,15 @@ function salvaMacchinario(id, nome) {
   } else {
     savedMacchinari[id].nome = nome;
   }
-  localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+  folders[currentAnno].macchinari = savedMacchinari;
+  localStorage.setItem("folders", JSON.stringify(folders));
 }
 
 function toggleDettagli(id) {
   if (!savedMacchinari[id]) return;
   savedMacchinari[id].expanded = !savedMacchinari[id].expanded;
-  localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+  folders[currentAnno].macchinari = savedMacchinari;
+  localStorage.setItem("folders", JSON.stringify(folders));
   renderMacchinari();
 }
 
@@ -444,7 +443,8 @@ function rinominaMacchinario(id) {
   }
 
   savedMacchinari[id].nome = nuovoNome;
-  localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+  folders[currentAnno].macchinari = savedMacchinari;
+  localStorage.setItem("folders", JSON.stringify(folders));
   renderMacchinari();
 }
 
@@ -455,7 +455,8 @@ function eliminaMacchinario(id) {
     `Sei sicuro di voler eliminare "${nome}"?`,
     () => {
       delete savedMacchinari[id];
-      localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+      folders[currentAnno].macchinari = savedMacchinari;
+      localStorage.setItem("folders", JSON.stringify(folders));
       renderMacchinari();
     }
   );
@@ -490,7 +491,8 @@ function eliminaNota(id, index) {
       if (savedMacchinari[id].note.length === 0) {
         savedMacchinari[id].expanded = false;
       }
-      localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+      folders[currentAnno].macchinari = savedMacchinari;
+      localStorage.setItem("folders", JSON.stringify(folders));
       renderMacchinari();
     }
   );
@@ -520,33 +522,30 @@ function aggiungiNota(id) {
   if (!savedMacchinari[id].note) savedMacchinari[id].note = [];
 
   if (notaInModifica && notaInModifica.id === id) {
-    // Modifica nota esistente
     savedMacchinari[id].note[notaInModifica.index] = { data, desc };
     notaInModifica = null;
   } else {
-    // Aggiungi nuova nota
     savedMacchinari[id].note.push({ data, desc });
   }
 
   savedMacchinari[id].expanded = true;
-  localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+  folders[currentAnno].macchinari = savedMacchinari;
+  localStorage.setItem("folders", JSON.stringify(folders));
   renderMacchinari(id);
 }
 
-// --- FUNZIONI RICERCA E MOSTRA TUTTI ---
+// --- RICERCA E MOSTRA TUTTI ---
 
 searchInput.addEventListener("input", e => {
-  searchFilter = e.target.value.trim().toLowerCase();
   renderMacchinari();
 });
 
 showAllBtn.addEventListener("click", () => {
   searchInput.value = "";
-  searchFilter = "";
   renderMacchinari();
 });
 
-// --- BOTTONI CREAZIONE MACCHINARIO E MODAL ---
+// --- CREAZIONE MACCHINARIO E MODAL ---
 
 createBtn.addEventListener("click", () => {
   nomeInput.value = "";
@@ -575,7 +574,8 @@ btnConferma.addEventListener("click", () => {
 
   const id = Date.now().toString();
   savedMacchinari[id] = { nome, note: [], expanded: true };
-  localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+  folders[currentAnno].macchinari = savedMacchinari;
+  localStorage.setItem("folders", JSON.stringify(folders));
 
   nomeModal.classList.add("hidden");
   erroreNome.style.display = "none";
@@ -606,7 +606,7 @@ startBtn.addEventListener("click", () => {
           gestioneScan(qrCodeMessage);
         },
         errorMessage => {
-          // console.log(`Scan error: ${errorMessage}`);
+          // error scanning
         }
       ).catch(err => {
         alert(`Errore avvio scansione: ${err}`);
@@ -641,11 +641,9 @@ stopBtn.addEventListener("click", () => {
 });
 
 function gestioneScan(text) {
-  // Qui gestisci il testo scansionato, es. aggiungi macchinario con nome uguale a text
   const nome = text.trim().toUpperCase();
   if (!nome) return;
 
-  // Controlla se macchinario già esiste
   const esisteGia = Object.values(savedMacchinari).some(m => m.nome === nome);
   if (esisteGia) {
     alert(`Macchinario "${nome}" già presente.`);
@@ -654,7 +652,8 @@ function gestioneScan(text) {
 
   const id = Date.now().toString();
   savedMacchinari[id] = { nome, note: [], expanded: false };
-  localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+  folders[currentAnno].macchinari = savedMacchinari;
+  localStorage.setItem("folders", JSON.stringify(folders));
   renderMacchinari(id);
 }
 

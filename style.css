@@ -806,3 +806,31 @@ button {
   border-radius: 5px !important;
   box-sizing: border-box;
 }
+
+.btn-rinomina,
+.btn-chiudi,
+.btn-elimina-macchinario {
+  min-width: 80px;      /* più piccoli */
+  max-width: 90px;
+  padding: 4px 6px;     /* meno padding */
+  font-size: 12px;      /* testo più piccolo */
+  border-radius: 5px;
+  border: 1px solid black;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  margin-right: 6px;    /* spazio tra bottoni */
+  box-sizing: border-box;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* container che li contiene */
+.nome-e-btn {
+  display: flex;
+  justify-content: center;
+  gap: 6px; /* distanza tra i btn */
+  flex-wrap: nowrap; /* non andare a capo */
+  align-items: center;
+}

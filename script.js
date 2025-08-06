@@ -367,9 +367,11 @@ function renderMacchinari(highlightId = null) {
       const btnsContainer = document.createElement("div");
       btnsContainer.className = "btns-macchinario";
       btnsContainer.innerHTML = `
-        <button class="btn-blue btn-rinomina" data-id="${id}">✏️ Rinomina</button>
-        <button class="btn-orange btn-chiudi" data-id="${id}">❌ Chiudi</button>
-        <button class="btn-red btn-elimina-macchinario" data-id="${id}">🗑️ Elimina</button>
+        <div class="nome-e-btn">
+          <button class="btn-blue btn-rinomina" data-id="${id}">✏️ Rinomina</button>
+          <button class="btn-orange btn-chiudi" data-id="${id}">❌ Chiudi</button>
+          <button class="btn-red btn-elimina-macchinario" data-id="${id}">🗑️ Elimina</button>
+        </div>
       `;
 
       box.appendChild(btnsContainer);

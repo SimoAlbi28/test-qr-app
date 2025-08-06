@@ -8,7 +8,6 @@ const showAllBtn = document.getElementById("show-all-btn");
 let searchFilter = "";
 let savedMacchinari = JSON.parse(localStorage.getItem("macchinari") || "{}");
 let html5QrCode;
-let copiaNoteActive = false;
 let notaInModifica = null;
 
 // --- MODAL PERSONALIZZATO PER CONFERME ---
@@ -18,26 +17,28 @@ function mostraModalConferma(messaggio, onConferma, onAnnulla) {
 
   const overlay = document.createElement("div");
   overlay.id = "custom-confirm-modal";
-  overlay.style.position = "fixed";
-  overlay.style.top = "0";
-  overlay.style.left = "0";
-  overlay.style.width = "100vw";
-  overlay.style.height = "100vh";
-  overlay.style.backgroundColor = "rgba(0,0,0,0.5)";
-  overlay.style.display = "flex";
-  overlay.style.justifyContent = "center";
-  overlay.style.alignItems = "center";
-  overlay.style.zIndex = "10000";
+  Object.assign(overlay.style, {
+    position: "fixed",
+    top: "0", left: "0",
+    width: "100vw", height: "100vh",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: "10000"
+  });
 
   const box = document.createElement("div");
-  box.style.backgroundColor = "#fff";
-  box.style.padding = "20px";
-  box.style.borderRadius = "8px";
-  box.style.width = "320px";
-  box.style.maxWidth = "90%";
-  box.style.textAlign = "center";
-  box.style.boxShadow = "0 2px 10px rgba(0,0,0,0.3)";
-  box.style.fontFamily = "Segoe UI, Tahoma, Geneva, Verdana, sans-serif";
+  Object.assign(box.style, {
+    backgroundColor: "#fff",
+    padding: "20px",
+    borderRadius: "8px",
+    width: "320px",
+    maxWidth: "90%",
+    textAlign: "center",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
+    fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif"
+  });
 
   const msg = document.createElement("p");
   msg.style.marginBottom = "20px";
@@ -46,18 +47,22 @@ function mostraModalConferma(messaggio, onConferma, onAnnulla) {
   box.appendChild(msg);
 
   const btnContainer = document.createElement("div");
-  btnContainer.style.display = "flex";
-  btnContainer.style.justifyContent = "center";
-  btnContainer.style.gap = "15px";
+  Object.assign(btnContainer.style, {
+    display: "flex",
+    justifyContent: "center",
+    gap: "15px"
+  });
 
   const btnAnnulla = document.createElement("button");
   btnAnnulla.textContent = "Annulla";
-  btnAnnulla.style.padding = "8px 16px";
-  btnAnnulla.style.border = "none";
-  btnAnnulla.style.backgroundColor = "#f44336";
-  btnAnnulla.style.color = "white";
-  btnAnnulla.style.borderRadius = "4px";
-  btnAnnulla.style.cursor = "pointer";
+  Object.assign(btnAnnulla.style, {
+    padding: "8px 16px",
+    border: "none",
+    backgroundColor: "#f44336",
+    color: "white",
+    borderRadius: "4px",
+    cursor: "pointer"
+  });
   btnAnnulla.onclick = () => {
     document.body.removeChild(overlay);
     if (onAnnulla) onAnnulla();
@@ -65,12 +70,14 @@ function mostraModalConferma(messaggio, onConferma, onAnnulla) {
 
   const btnConferma = document.createElement("button");
   btnConferma.textContent = "Conferma";
-  btnConferma.style.padding = "8px 16px";
-  btnConferma.style.border = "none";
-  btnConferma.style.backgroundColor = "#4CAF50";
-  btnConferma.style.color = "white";
-  btnConferma.style.borderRadius = "4px";
-  btnConferma.style.cursor = "pointer";
+  Object.assign(btnConferma.style, {
+    padding: "8px 16px",
+    border: "none",
+    backgroundColor: "#4CAF50",
+    color: "white",
+    borderRadius: "4px",
+    cursor: "pointer"
+  });
   btnConferma.onclick = () => {
     document.body.removeChild(overlay);
     if (onConferma) onConferma();
@@ -80,7 +87,6 @@ function mostraModalConferma(messaggio, onConferma, onAnnulla) {
   btnContainer.appendChild(btnConferma);
   box.appendChild(btnContainer);
   overlay.appendChild(box);
-
   document.body.appendChild(overlay);
 }
 // --- FINE MODAL ---
@@ -96,6 +102,7 @@ function formatData(d) {
   return `${dd}/${mm}/${yyyy.slice(2)}`;
 }
 
+// Crea area per copiare note
 function creaAreaCopiaNote(macchinarioBox, id, note) {
   const oldArea = macchinarioBox.querySelector(".copia-note-area");
   if (oldArea) oldArea.remove();
@@ -130,11 +137,13 @@ function creaAreaCopiaNote(macchinarioBox, id, note) {
   btnCopiaSelezionate.className = "btn-copia-selezionate";
 
   const btnContainer = document.createElement("div");
-  btnContainer.style.marginTop = "8px";
-  btnContainer.style.display = "flex";
-  btnContainer.style.justifyContent = "center";
-  btnContainer.style.flexWrap = "wrap";
-  btnContainer.style.gap = "6px";
+  Object.assign(btnContainer.style, {
+    marginTop: "8px",
+    display: "flex",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: "6px"
+  });
 
   btnContainer.appendChild(btnSelezionaTutte);
   btnContainer.appendChild(btnDeselezionaTutte);
@@ -148,7 +157,7 @@ function creaAreaCopiaNote(macchinarioBox, id, note) {
 
   function updateNoteButtonsAndCheckboxes(showCheckboxes) {
     const liNotes = macchinarioBox.querySelectorAll(".note-list li");
-    liNotes.forEach((li, i) => {
+    liNotes.forEach(li => {
       const checkbox = li.querySelector("input[type=checkbox]");
       const btns = li.querySelector(".btns-note");
       if (checkbox) checkbox.style.display = showCheckboxes ? "inline-block" : "none";
@@ -193,7 +202,6 @@ function creaAreaCopiaNote(macchinarioBox, id, note) {
         return `- [${formatData(n.data)}]: ${n.desc};`;
       }).join("\n");
 
-
     navigator.clipboard.writeText(testoDaCopiare).then(() => {
       alert("✅ Note copiate!");
       selezioneDiv.style.display = "none";
@@ -225,16 +233,17 @@ function renderMacchinari(highlightId = null) {
     box.innerHTML = `
       <h3>${data.nome}</h3>
       <div class="nome-e-btn">
-        <button class="toggle-btn" onclick="toggleDettagli('${id}')">
+        <button class="toggle-btn" data-id="${id}">
           ${expanded ? "🔽" : "🔼"}
         </button>
       </div>
     `;
 
+    // Aggancia evento toggle btn
+    box.querySelector(".toggle-btn").addEventListener("click", () => toggleDettagli(id));
+
     if (expanded) {
       box.appendChild(createLineSeparator());
-
-      // Qui invertito: prima inserimento note poi lista note
 
       // Inserimento note
       const insertNoteTitle = document.createElement("h4");
@@ -250,11 +259,14 @@ function renderMacchinari(highlightId = null) {
         <label>Descrizione (max 300):</label>
         <input type="text" id="desc-${id}" maxlength="300">
         <div style="text-align:center; margin-top:10px;">
-          <button class="btn-green" onclick="aggiungiNota('${id}')">Conferma</button>
+          <button class="btn-green" id="btn-conferma-${id}">Conferma</button>
         </div>
       `;
 
       box.appendChild(noteForm);
+
+      // Evento conferma nota
+      noteForm.querySelector(`#btn-conferma-${id}`).addEventListener("click", () => aggiungiNota(id));
 
       box.appendChild(createLineSeparator());
 
@@ -283,7 +295,7 @@ function renderMacchinari(highlightId = null) {
           checkbox.type = "checkbox";
           checkbox.className = "checkbox-copia-note";
           checkbox.value = index;
-          checkbox.style.display = copiaNoteActive ? "inline-block" : "none";
+          checkbox.style.display = "none";
 
           const testoNota = document.createElement("div");
           testoNota.style.flex = "1";
@@ -291,11 +303,11 @@ function renderMacchinari(highlightId = null) {
 
           const btns = document.createElement("div");
           btns.className = "btns-note";
+          btns.style.display = "flex";
           btns.innerHTML = `
-            <button class="btn-blue" onclick="modificaNota('${id}', ${index})">✏️</button>
-            <button class="btn-red" onclick="eliminaNota('${id}', ${index})">🗑️</button>
+            <button class="btn-blue btn-modifica" data-id="${id}" data-index="${index}">✏️</button>
+            <button class="btn-red btn-elimina" data-id="${id}" data-index="${index}">🗑️</button>
           `;
-          btns.style.display = copiaNoteActive ? "none" : "flex";
 
           li.appendChild(checkbox);
           li.appendChild(testoNota);
@@ -314,12 +326,34 @@ function renderMacchinari(highlightId = null) {
       const btnsContainer = document.createElement("div");
       btnsContainer.className = "btns-macchinario";
       btnsContainer.innerHTML = `
-        <button id="btn-rin" class="btn-blue" onclick="rinominaMacchinario('${id}')">✏️ Rinomina</button>
-        <button id="btn-chiudi" class="btn-orange" onclick="toggleDettagli('${id}')">❌ Chiudi</button>
-        <button class="btn-red" onclick="eliminaMacchinario('${id}')">🗑️ Elimina</button>
+        <button class="btn-blue btn-rinomina" data-id="${id}">✏️ Rinomina</button>
+        <button class="btn-orange btn-chiudi" data-id="${id}">❌ Chiudi</button>
+        <button class="btn-red btn-elimina-macchinario" data-id="${id}">🗑️ Elimina</button>
       `;
 
       box.appendChild(btnsContainer);
+
+      // Eventi bottoni azioni
+      btnsContainer.querySelector(".btn-rinomina").addEventListener("click", () => rinominaMacchinario(id));
+      btnsContainer.querySelector(".btn-chiudi").addEventListener("click", () => toggleDettagli(id));
+      btnsContainer.querySelector(".btn-elimina-macchinario").addEventListener("click", () => eliminaMacchinario(id));
+
+      // Eventi bottoni note
+      box.querySelectorAll(".btn-modifica").forEach(btn =>
+        btn.addEventListener("click", (e) => {
+          const idMod = e.currentTarget.dataset.id;
+          const idx = Number(e.currentTarget.dataset.index);
+          modificaNota(idMod, idx);
+        })
+      );
+
+      box.querySelectorAll(".btn-elimina").forEach(btn =>
+        btn.addEventListener("click", (e) => {
+          const idEl = e.currentTarget.dataset.id;
+          const idx = Number(e.currentTarget.dataset.index);
+          eliminaNota(idEl, idx);
+        })
+      );
     }
 
     listContainer.appendChild(box);
@@ -347,12 +381,14 @@ function salvaMacchinario(id, nome) {
 }
 
 function toggleDettagli(id) {
+  if (!savedMacchinari[id]) return;
   savedMacchinari[id].expanded = !savedMacchinari[id].expanded;
   localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
   renderMacchinari();
 }
 
 function rinominaMacchinario(id) {
+  if (!savedMacchinari[id]) return;
   const nuovoNome = prompt("Nuovo nome:", savedMacchinari[id].nome)?.trim().toUpperCase();
   if (!nuovoNome) return;
 
@@ -371,6 +407,7 @@ function rinominaMacchinario(id) {
 }
 
 function eliminaMacchinario(id) {
+  if (!savedMacchinari[id]) return;
   const nome = savedMacchinari[id].nome;
   mostraModalConferma(
     `Sei sicuro di voler eliminare "${nome}"?`,
@@ -378,24 +415,22 @@ function eliminaMacchinario(id) {
       delete savedMacchinari[id];
       localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
       renderMacchinari();
-    },
-    () => {
-      // Annullato: niente
     }
   );
 }
 
 function aggiungiNota(id) {
+  if (!savedMacchinari[id]) return;
   const data = document.getElementById(`data-${id}`).value;
   const desc = document.getElementById(`desc-${id}`).value.trim();
-  if (!data || !desc) return;
+  if (!data || !desc) return alert("Data e descrizione sono obbligatori.");
 
   if (notaInModifica && notaInModifica.id === id) {
     // MODIFICA
     savedMacchinari[id].note[notaInModifica.index] = { data, desc };
     notaInModifica = null;
   } else {
-    // AGGIUNGI NUOVA
+    // NUOVA NOTA
     savedMacchinari[id].note = savedMacchinari[id].note || [];
     savedMacchinari[id].note.push({ data, desc });
   }
@@ -403,21 +438,22 @@ function aggiungiNota(id) {
   document.getElementById(`data-${id}`).value = "";
   document.getElementById(`desc-${id}`).value = "";
   localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
-  renderMacchinari();
+  renderMacchinari(id);
 }
 
 function modificaNota(id, index) {
+  if (!savedMacchinari[id]) return;
   const dataInput = document.getElementById(`data-${id}`);
   const descInput = document.getElementById(`desc-${id}`);
   const nota = savedMacchinari[id].note[index];
 
-  // Se stai già modificando questa stessa nota → svuota e annulla
   if (notaInModifica && notaInModifica.id === id && notaInModifica.index === index) {
+    // Annulla modifica
     dataInput.value = "";
     descInput.value = "";
     notaInModifica = null;
   } else {
-    // Altrimenti avvia modifica
+    // Avvia modifica
     dataInput.value = nota.data;
     descInput.value = nota.desc;
     notaInModifica = { id, index };
@@ -425,6 +461,7 @@ function modificaNota(id, index) {
 }
 
 function eliminaNota(id, index) {
+  if (!savedMacchinari[id]) return;
   const nota = savedMacchinari[id].note[index];
   const parole = nota.desc.trim().split(/\s+/);
   const descBreve = parole.length > 10 ? parole.slice(0, 10).join(" ") + "..." : nota.desc;
@@ -434,10 +471,7 @@ function eliminaNota(id, index) {
     () => {
       savedMacchinari[id].note.splice(index, 1);
       localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
-      renderMacchinari();
-    },
-    () => {
-      // Annullato: niente
+      renderMacchinari(id);
     }
   );
 }
@@ -462,7 +496,7 @@ function startScan() {
       if (!savedMacchinari[qrCodeMessage]) {
         function chiediNome() {
           const nome = prompt("Nome:")?.trim().toUpperCase();
-          if (nome === null || nome === "") return; // non alert, esci silenzioso
+          if (!nome) return;
 
           const esisteGia = Object.values(savedMacchinari).some(
             m => m.nome.toUpperCase() === nome
@@ -514,8 +548,16 @@ showAllBtn.addEventListener("click", () => {
 });
 
 function creaMacchinarioManuale() {
-  const nome = prompt("Inserire nome:")?.trim().toUpperCase();
-  if (nome === null || nome === "") return; // non alert, esci silenzioso
+  const nomeRaw = prompt("Inserire nome:");  
+  if (nomeRaw === null) {
+    console.log("Creazione macchinario annullata");
+    return; // Se l'utente clicca annulla nel prompt
+  }
+  const nome = nomeRaw.trim().toUpperCase();
+  if (!nome) {
+    alert("⚠️ Nome non valido");
+    return;
+  }
 
   const esisteGia = Object.values(savedMacchinari).some(
     m => m.nome.toUpperCase() === nome
@@ -528,11 +570,13 @@ function creaMacchinarioManuale() {
 
   const id = "custom-" + Math.random().toString(36).substr(2, 9);
   salvaMacchinario(id, nome);
+  console.log("Macchinario creato:", id, nome);
   renderMacchinari(id);
 }
 
 document.getElementById("create-macchinario").addEventListener("click", creaMacchinarioManuale);
 
+// All'avvio: chiudo tutto
 Object.values(savedMacchinari).forEach(macch => macch.expanded = false);
 localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
 

@@ -23,7 +23,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-bottom: 40px; /* spazio aumentato sotto il titolo */
+  margin-bottom: 40px;
 }
 
 .title-top {
@@ -107,6 +107,33 @@ button {
   transition: background-color 0.3s ease;
 }
 
+/* Bottone e container per i bottoni macchinario - fix overflow */
+.btns-macchinario {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap; /* vai a capo se serve */
+  max-width: 100vw; /* non più largo dello schermo */
+  box-sizing: border-box;
+  padding: 0 10px;
+  overflow-x: hidden; /* niente scroll orizzontale */
+}
+
+.btns-macchinario button {
+  flex: 0 0 auto; /* non cresce né si restringe */
+  max-width: 140px; /* max larghezza bottone */
+  min-width: 60px; /* min larghezza bottone */
+  width: 100%; /* su mobile prende tutta larghezza disponibile */
+  box-sizing: border-box;
+}
+
+@media(min-width: 480px) {
+  .btns-macchinario button {
+    width: auto; /* su desktop larghezza normale */
+  }
+}
+
 .toggle-btn,
 .btns-note button,
 .note-form button,
@@ -120,39 +147,12 @@ button {
 }
 
 .btns-note,
-.btns-macchinario,
 #buttons-container,
 .nome-e-btn {
   display: flex;
   justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
-}
-
-/* Qui modifico .btns-macchinario per far andare i bottoni 2x2 su mobile */
-.btns-macchinario {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 8px;
-  flex-wrap: wrap; /* fa andare i bottoni a capo */
-}
-
-.btns-macchinario button {
-  flex: 1 1 45%; /* larghezza flessibile per 2 per riga */
-  max-width: 140px;
-  box-sizing: border-box;
-}
-
-@media(min-width: 480px) {
-  .btns-macchinario {
-    flex-wrap: nowrap;
-  }
-
-  .btns-macchinario button {
-    flex: 0 0 auto;
-    max-width: none;
-  }
 }
 
 #btn-home {
@@ -205,7 +205,6 @@ button {
 
 .btn-orange {
   background-color: orange;
-  border: 1px solid black;
   color: white;
 }
 
@@ -234,8 +233,7 @@ button {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   text-align: center;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  
-  margin-bottom: 18px; /* Spazio verticale tra i macchinari */
+  margin-bottom: 18px;
   box-shadow: 0 2px 8px rgba(0,123,255,0.1);
 }
 
@@ -278,10 +276,10 @@ button {
   list-style: none;
   padding: 0;
   margin: 0 0 15px 0;
-  max-width: 380px;      /* limita larghezza lista */
+  max-width: 380px;
   margin-left: auto;
-  margin-right: auto;    /* centra lista nel contenitore */
-  text-align: left;      /* testo allineato a sinistra dentro la lista */
+  margin-right: auto;
+  text-align: left;
 }
 
 .note-list li {
@@ -291,13 +289,13 @@ button {
   border-radius: 8px;
   margin-bottom: 12px;
   padding: 12px 12px 40px 12px;
-  padding-right: 45px;   /* spazio per checkbox sulla destra */
+  padding-right: 45px;
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
   word-break: break-word;
   display: block;
-  box-sizing: border-box; /* fa sì che padding e border non sforino */
+  box-sizing: border-box;
 }
 
 .nota-data {
@@ -387,6 +385,24 @@ button {
   gap: 10px;
   margin-top: 8px;
   flex-wrap: wrap;
+  max-width: 100vw;
+  box-sizing: border-box;
+  padding: 0 10px;
+  overflow-x: hidden;
+}
+
+.btns-macchinario button {
+  flex: 0 0 auto;
+  max-width: 140px;
+  min-width: 60px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media(min-width: 480px) {
+  .btns-macchinario button {
+    width: auto;
+  }
 }
 
 #search-box {
@@ -439,7 +455,7 @@ button {
 }
 
 #show-all-btn:hover {
-  background-color: rgb(150, 106, 255);
+  background-color: #2980b9;
 }
 
 .modal {
@@ -571,7 +587,6 @@ button {
   justify-content: center;
   max-width: 280px;
   margin: 10px auto 20px auto;
-  /* mantiene il centro e spaziatura */
 }
 
 /* Assicura che i bottoni abbiano la stessa larghezza */
@@ -601,16 +616,14 @@ button {
 }
 
 .note-list li {
-  border: 1px solid #ccc; /* bordo default */
+  border: 1px solid #ccc;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Usa un trucco CSS per cambiare stile del li quando checkbox è checked */
-.note-list li input[type="checkbox"]:checked {
-  /* serve solo a triggerare il selettore */
+.note-list li input[type="checkbox"]:checked ~ div,
+.note-list li input[type="checkbox"]:checked ~ .btns-note {
 }
 
-/* Usa :has() per cambiare bordo esterno se browser supporta */
 .note-list li:has(input[type="checkbox"]:checked) {
   border-color: #444;
   box-shadow: 0 0 8px rgba(0,0,0,0.3);

@@ -10,6 +10,40 @@ let savedMacchinari = JSON.parse(localStorage.getItem("macchinari") || "{}");
 let html5QrCode;
 let notaInModifica = null;
 
+// --- AGGIUNTA: MOSTRA ANNO CARTELLA SOTTO IL TITOLO ---
+function mostraAnnoSottoTitolo() {
+  const titoloTop = document.getElementById("titleTop");
+  if (!titoloTop) return;
+
+  const annoCartella = "2025"; // metti quello che ti serve dinamico o fisso
+
+  // Rimuovo se già c’è
+  const oldAnno = document.getElementById("annoSottoTitolo");
+  if (oldAnno) oldAnno.remove();
+
+  const divAnno = document.createElement("div");
+  divAnno.id = "annoSottoTitolo";
+  divAnno.textContent = `Anno cartella: ${annoCartella}`;
+  divAnno.style.fontSize = "1rem";
+  divAnno.style.color = "white";
+  divAnno.style.marginTop = "5px";
+  divAnno.style.fontWeight = "bold";
+
+  // Inserisco subito dopo titolo
+  titoloTop.insertAdjacentElement("afterend", divAnno);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  mostraAnnoSottoTitolo();
+});
+
+// Aspetta che il DOM sia pronto
+document.addEventListener("DOMContentLoaded", () => {
+  mostraAnnoCartella();
+});
+
+// --- FINE AGGIUNTA ---
+
 // --- MODAL PERSONALIZZATO PER CONFERME ---
 function mostraModalConferma(messaggio, onConferma, onAnnulla) {
   let oldModal = document.getElementById("custom-confirm-modal");
@@ -579,5 +613,8 @@ document.getElementById("create-macchinario").addEventListener("click", creaMacc
 // All'avvio: chiudo tutto
 Object.values(savedMacchinari).forEach(macch => macch.expanded = false);
 localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+
+// MOSTRO L'ANNO CARTELLA APPENA PARTE
+mostraAnnoCartella();
 
 renderMacchinari();

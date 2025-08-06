@@ -716,6 +716,7 @@ button {
   box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
+#btn-home,
 #start-scan,
 #stop-scan,
 #create-macchinario {

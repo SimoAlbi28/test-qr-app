@@ -49,7 +49,7 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 2px solid gray
+  border: 2px solid gray;
 }
 
 .folder:hover {
@@ -82,19 +82,51 @@ h1 {
 .btns {
   display: flex;
   gap: 10px;
+  justify-content: center;
 }
 
+/* Bottoni con riquadro piccolo colorato */
 .btns button {
   font-size: 16px;
-  padding: 4px 6px;
+  padding: 0;
   cursor: pointer;
   border: none;
-  background: none;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+/* Colori specifici per ogni tipo di bottone */
+.btns .btn-rename {
+  background-color: #007bff; /* blu matita */
+  border: 1px solid black;
+}
+
+.btns .btn-delete {
+  background-color: #f44336; /* rosso cestino */
+  border: 1px solid black;
+}
+
+.btns .btn-copy {
+  background-color: #db0cff; /* viola chiaro */
+  border: 1px solid black;
+}
+
+/* Hover effetto più scuro */
+.btns button:hover {
+  filter: brightness(0.85);
 }
 
 /* Pulsante nuova cartella */
 #btn-add-folder {
-  background: #007bff;
+  background: #00d9ff;
   color: white;
   border: 2px solid black;
   padding: 12px 0;

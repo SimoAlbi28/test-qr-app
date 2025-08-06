@@ -46,9 +46,10 @@ h2 {
   grid-template-rows: repeat(2, 40px);
   gap: 12px 20px;
   justify-content: center;
-  max-width: 280px; /* o quanto vuoi per tenerli stretti */
+  max-width: 310px; /* o quanto vuoi per tenerli stretti */
   margin: 0 auto 25px auto;
 }
+
 .row-btns {
   display: flex;
   gap: 8px;
@@ -70,6 +71,7 @@ h2 {
   padding: 5px 8px;
   white-space: nowrap;
   user-select: none;
+  text-align: center;
 }
 
 #btn-home:hover {
@@ -241,6 +243,7 @@ button {
   border-radius: 5px;
   border: 1px solid black;
   min-width: 85px;
+  text-align: center;
 }
 
 #btn-home:hover {
@@ -715,11 +718,12 @@ button {
 #start-scan,
 #stop-scan {
   min-width: 70px;
-  max-width: 130px;
+  max-width: 150px;
   font-size: 13px;
   padding: 6px 10px;
   height: 36px;
   box-sizing: border-box;
+  text-align: center;
 }
 
 #btn-conferma,

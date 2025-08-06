@@ -598,7 +598,10 @@ startBtn.addEventListener("click", () => {
 
   Html5Qrcode.getCameras().then(cameras => {
     if (cameras && cameras.length) {
-      const cameraId = cameras[0].id;
+      // Cerca camera con facingMode "environment" (posteriore)
+      const cameraRear = cameras.find(cam => cam.label.toLowerCase().includes("back") || cam.label.toLowerCase().includes("rear"));
+      const cameraId = cameraRear ? cameraRear.id : cameras[0].id;
+
       html5QrCode.start(
         cameraId,
         { fps: 10, qrbox: 250 },
@@ -608,7 +611,8 @@ startBtn.addEventListener("click", () => {
         errorMessage => {
           // error scanning
         }
-      ).catch(err => {
+      )
+      .catch(err => {
         alert(`Errore avvio scansione: ${err}`);
         startBtn.disabled = false;
         stopBtn.disabled = true;

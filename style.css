@@ -42,11 +42,11 @@ h2 {
 
 #buttons-container {
   display: grid;
-  grid-template-columns: repeat(2, minmax(70px, 130px));
+  grid-template-columns: repeat(2, minmax(90px, 150px));
   grid-template-rows: repeat(2, 40px);
   gap: 12px 20px;
   justify-content: center;
-  max-width: 310px; /* o quanto vuoi per tenerli stretti */
+  max-width: 320px; /* più largo per non tagliare */
   margin: 0 auto 25px auto;
 }
 
@@ -717,13 +717,12 @@ button {
 #create-macchinario,
 #start-scan,
 #stop-scan {
-  min-width: 70px;
+  min-width: 90px;
   max-width: 150px;
   font-size: 13px;
   padding: 6px 10px;
   height: 36px;
   box-sizing: border-box;
-  text-align: center;
 }
 
 #btn-conferma,

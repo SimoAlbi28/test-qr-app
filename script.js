@@ -5,17 +5,36 @@ const stopBtn = document.getElementById("stop-scan");
 const searchInput = document.getElementById("search-input");
 const showAllBtn = document.getElementById("show-all-btn");
 
+const createBtn = document.getElementById("create-macchinario");
+const nomeModal = document.getElementById("nomeModal");
+const nomeInput = document.getElementById("nomeInput");
+const btnConferma = document.getElementById("btnConferma");
+const btnAnnulla = document.getElementById("btnAnnulla");
+const erroreNome = document.getElementById("erroreNome");
+
 let searchFilter = "";
 let savedMacchinari = JSON.parse(localStorage.getItem("macchinari") || "{}");
-let html5QrCode;
-let notaInModifica = null;
+
+if (!savedMacchinari || typeof savedMacchinari !== "object") {
+  savedMacchinari = {};
+}
+
+// Qui resettiamo tutti a expanded = false ogni volta che si carica la pagina
+Object.entries(savedMacchinari).forEach(([id, macch]) => {
+  savedMacchinari[id].expanded = false;
+});
+
+localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+
+
+localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
 
 // --- AGGIUNTA: MOSTRA ANNO CARTELLA SOTTO IL TITOLO ---
-function mostraAnnoSottoTitolo() {
+function mostraAnnoCartella() {
   const titoloTop = document.getElementById("titleTop");
   if (!titoloTop) return;
 
-  const annoCartella = "2025"; // metti quello che ti serve dinamico o fisso
+  const annoCartella = "2025"; // qui metti anno dinamico o fisso
 
   // Rimuovo se già c’è
   const oldAnno = document.getElementById("annoSottoTitolo");
@@ -32,17 +51,6 @@ function mostraAnnoSottoTitolo() {
   // Inserisco subito dopo titolo
   titoloTop.insertAdjacentElement("afterend", divAnno);
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  mostraAnnoSottoTitolo();
-});
-
-// Aspetta che il DOM sia pronto
-document.addEventListener("DOMContentLoaded", () => {
-  mostraAnnoCartella();
-});
-
-// --- FINE AGGIUNTA ---
 
 // --- MODAL PERSONALIZZATO PER CONFERME ---
 function mostraModalConferma(messaggio, onConferma, onAnnulla) {
@@ -87,9 +95,9 @@ function mostraModalConferma(messaggio, onConferma, onAnnulla) {
     gap: "15px"
   });
 
-  const btnAnnulla = document.createElement("button");
-  btnAnnulla.textContent = "Annulla";
-  Object.assign(btnAnnulla.style, {
+  const btnAnnullaModal = document.createElement("button");
+  btnAnnullaModal.textContent = "Annulla";
+  Object.assign(btnAnnullaModal.style, {
     padding: "8px 16px",
     border: "none",
     backgroundColor: "#f44336",
@@ -97,14 +105,14 @@ function mostraModalConferma(messaggio, onConferma, onAnnulla) {
     borderRadius: "4px",
     cursor: "pointer"
   });
-  btnAnnulla.onclick = () => {
+  btnAnnullaModal.onclick = () => {
     document.body.removeChild(overlay);
     if (onAnnulla) onAnnulla();
   };
 
-  const btnConferma = document.createElement("button");
-  btnConferma.textContent = "Conferma";
-  Object.assign(btnConferma.style, {
+  const btnConfermaModal = document.createElement("button");
+  btnConfermaModal.textContent = "Conferma";
+  Object.assign(btnConfermaModal.style, {
     padding: "8px 16px",
     border: "none",
     backgroundColor: "#4CAF50",
@@ -112,13 +120,13 @@ function mostraModalConferma(messaggio, onConferma, onAnnulla) {
     borderRadius: "4px",
     cursor: "pointer"
   });
-  btnConferma.onclick = () => {
+  btnConfermaModal.onclick = () => {
     document.body.removeChild(overlay);
     if (onConferma) onConferma();
   };
 
-  btnContainer.appendChild(btnAnnulla);
-  btnContainer.appendChild(btnConferma);
+  btnContainer.appendChild(btnAnnullaModal);
+  btnContainer.appendChild(btnConfermaModal);
   box.appendChild(btnContainer);
   overlay.appendChild(box);
   document.body.appendChild(overlay);
@@ -273,7 +281,7 @@ function renderMacchinari(highlightId = null) {
       </div>
     `;
 
-    // Aggancia evento toggle btn
+    // Evento toggle btn
     box.querySelector(".toggle-btn").addEventListener("click", () => toggleDettagli(id));
 
     if (expanded) {
@@ -453,168 +461,204 @@ function eliminaMacchinario(id) {
   );
 }
 
-function aggiungiNota(id) {
-  if (!savedMacchinari[id]) return;
-  const data = document.getElementById(`data-${id}`).value;
-  const desc = document.getElementById(`desc-${id}`).value.trim();
-  if (!data || !desc) return alert("Data e descrizione sono obbligatori.");
-
-  if (notaInModifica && notaInModifica.id === id) {
-    // MODIFICA
-    savedMacchinari[id].note[notaInModifica.index] = { data, desc };
-    notaInModifica = null;
-  } else {
-    // NUOVA NOTA
-    savedMacchinari[id].note = savedMacchinari[id].note || [];
-    savedMacchinari[id].note.push({ data, desc });
-  }
-
-  document.getElementById(`data-${id}`).value = "";
-  document.getElementById(`desc-${id}`).value = "";
-  localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
-  renderMacchinari(id);
-}
+let notaInModifica = null;
 
 function modificaNota(id, index) {
   if (!savedMacchinari[id]) return;
-  const dataInput = document.getElementById(`data-${id}`);
-  const descInput = document.getElementById(`desc-${id}`);
   const nota = savedMacchinari[id].note[index];
+  if (!nota) return;
 
-  if (notaInModifica && notaInModifica.id === id && notaInModifica.index === index) {
-    // Annulla modifica
-    dataInput.value = "";
-    descInput.value = "";
-    notaInModifica = null;
-  } else {
-    // Avvia modifica
-    dataInput.value = nota.data;
-    descInput.value = nota.desc;
-    notaInModifica = { id, index };
-  }
+  notaInModifica = { id, index };
+
+  const box = document.querySelector(`.macchinario[data-id="${id}"]`);
+  if (!box) return;
+
+  const dataInput = box.querySelector(`#data-${id}`);
+  const descInput = box.querySelector(`#desc-${id}`);
+
+  dataInput.value = nota.data;
+  descInput.value = nota.desc;
 }
 
 function eliminaNota(id, index) {
   if (!savedMacchinari[id]) return;
-  const nota = savedMacchinari[id].note[index];
-  const parole = nota.desc.trim().split(/\s+/);
-  const descBreve = parole.length > 10 ? parole.slice(0, 10).join(" ") + "..." : nota.desc;
-
+  const nome = savedMacchinari[id].nome;
   mostraModalConferma(
-    `Vuoi davvero eliminare la nota del ${formatData(nota.data)}?\n\n"${descBreve}"`,
+    `Sei sicuro di voler eliminare questa nota di "${nome}"?`,
     () => {
       savedMacchinari[id].note.splice(index, 1);
+      if (savedMacchinari[id].note.length === 0) {
+        savedMacchinari[id].expanded = false;
+      }
       localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
-      renderMacchinari(id);
+      renderMacchinari();
     }
   );
 }
 
-function startScan() {
-  reader.classList.remove("hidden");
-  startBtn.disabled = true;
-  stopBtn.disabled = false;
+function aggiungiNota(id) {
+  if (!savedMacchinari[id]) return;
 
-  html5QrCode = new Html5Qrcode("reader");
+  const box = document.querySelector(`.macchinario[data-id="${id}"]`);
+  if (!box) return;
 
-  html5QrCode.start(
-    { facingMode: { exact: "environment" } },
-    { fps: 10, qrbox: 250 },
-    (qrCodeMessage) => {
-      html5QrCode.stop().then(() => {
-        reader.classList.add("hidden");
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-      });
+  const dataInput = box.querySelector(`#data-${id}`);
+  const descInput = box.querySelector(`#desc-${id}`);
 
-      if (!savedMacchinari[qrCodeMessage]) {
-        function chiediNome() {
-          const nome = prompt("Nome:")?.trim().toUpperCase();
-          if (!nome) return;
+  const data = dataInput.value;
+  const desc = descInput.value.trim();
 
-          const esisteGia = Object.values(savedMacchinari).some(
-            m => m.nome.toUpperCase() === nome
-          );
-
-          if (esisteGia) {
-            alert("⚠️ Nome già esistente. Inserisci un nome diverso.");
-            chiediNome();
-          } else {
-            salvaMacchinario(qrCodeMessage, nome);
-            renderMacchinari(qrCodeMessage);
-          }
-        }
-        chiediNome();
-      } else {
-        savedMacchinari[qrCodeMessage].expanded = true;
-        renderMacchinari(qrCodeMessage);
-      }
-    }
-  ).catch((err) => {
-    alert("Errore nell'avvio della fotocamera: " + err);
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
-  });
-}
-
-function stopScan() {
-  if (html5QrCode) {
-    html5QrCode.stop().then(() => {
-      reader.classList.add("hidden");
-      startBtn.disabled = false;
-      stopBtn.disabled = true;
-    });
+  if (!data) {
+    alert("Inserisci una data valida.");
+    return;
   }
+  if (!desc) {
+    alert("Inserisci una descrizione.");
+    return;
+  }
+
+  if (!savedMacchinari[id].note) savedMacchinari[id].note = [];
+
+  if (notaInModifica && notaInModifica.id === id) {
+    // Modifica nota esistente
+    savedMacchinari[id].note[notaInModifica.index] = { data, desc };
+    notaInModifica = null;
+  } else {
+    // Aggiungi nuova nota
+    savedMacchinari[id].note.push({ data, desc });
+  }
+
+  savedMacchinari[id].expanded = true;
+  localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+  renderMacchinari(id);
 }
 
-startBtn.addEventListener("click", startScan);
-stopBtn.addEventListener("click", stopScan);
+// --- FUNZIONI RICERCA E MOSTRA TUTTI ---
 
-searchInput.addEventListener("input", () => {
-  searchFilter = searchInput.value.trim();
+searchInput.addEventListener("input", e => {
+  searchFilter = e.target.value.trim().toLowerCase();
   renderMacchinari();
 });
 
 showAllBtn.addEventListener("click", () => {
-  searchFilter = "";
   searchInput.value = "";
+  searchFilter = "";
   renderMacchinari();
 });
 
-function creaMacchinarioManuale() {
-  const nomeRaw = prompt("Inserire nome:");  
-  if (nomeRaw === null) {
-    console.log("Creazione macchinario annullata");
-    return; // Se l'utente clicca annulla nel prompt
-  }
-  const nome = nomeRaw.trim().toUpperCase();
+// --- BOTTONI CREAZIONE MACCHINARIO E MODAL ---
+
+createBtn.addEventListener("click", () => {
+  nomeInput.value = "";
+  erroreNome.style.display = "none";
+  nomeModal.classList.remove("hidden");
+  nomeInput.focus();
+});
+
+btnAnnulla.addEventListener("click", () => {
+  nomeModal.classList.add("hidden");
+  erroreNome.style.display = "none";
+});
+
+btnConferma.addEventListener("click", () => {
+  const nome = nomeInput.value.trim().toUpperCase();
   if (!nome) {
-    alert("⚠️ Nome non valido");
+    alert("Inserisci un nome valido.");
     return;
   }
 
-  const esisteGia = Object.values(savedMacchinari).some(
-    m => m.nome.toUpperCase() === nome
-  );
-
+  const esisteGia = Object.values(savedMacchinari).some(m => m.nome === nome);
   if (esisteGia) {
-    alert("⚠️ Nome già esistente. Inserisci un nome diverso.");
+    erroreNome.style.display = "block";
     return;
   }
 
-  const id = "custom-" + Math.random().toString(36).substr(2, 9);
-  salvaMacchinario(id, nome);
-  console.log("Macchinario creato:", id, nome);
+  const id = Date.now().toString();
+  savedMacchinari[id] = { nome, note: [], expanded: true };
+  localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
+
+  nomeModal.classList.add("hidden");
+  erroreNome.style.display = "none";
+
+  renderMacchinari(id);
+});
+
+// --- SCANSIONE QR CODE ---
+
+let html5QrCode = null;
+
+startBtn.addEventListener("click", () => {
+  startBtn.disabled = true;
+  stopBtn.disabled = false;
+  reader.classList.remove("hidden");
+
+  if (!html5QrCode) {
+    html5QrCode = new Html5Qrcode("reader");
+  }
+
+  Html5Qrcode.getCameras().then(cameras => {
+    if (cameras && cameras.length) {
+      const cameraId = cameras[0].id;
+      html5QrCode.start(
+        cameraId,
+        { fps: 10, qrbox: 250 },
+        qrCodeMessage => {
+          gestioneScan(qrCodeMessage);
+        },
+        errorMessage => {
+          // console.log(`Scan error: ${errorMessage}`);
+        }
+      ).catch(err => {
+        alert(`Errore avvio scansione: ${err}`);
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        reader.classList.add("hidden");
+      });
+    } else {
+      alert("Nessuna fotocamera trovata.");
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      reader.classList.add("hidden");
+    }
+  }).catch(err => {
+    alert(`Errore fotocamera: ${err}`);
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+    reader.classList.add("hidden");
+  });
+});
+
+stopBtn.addEventListener("click", () => {
+  if (html5QrCode) {
+    html5QrCode.stop().then(() => {
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      reader.classList.add("hidden");
+    }).catch(err => {
+      alert(`Errore stop scansione: ${err}`);
+    });
+  }
+});
+
+function gestioneScan(text) {
+  // Qui gestisci il testo scansionato, es. aggiungi macchinario con nome uguale a text
+  const nome = text.trim().toUpperCase();
+  if (!nome) return;
+
+  // Controlla se macchinario già esiste
+  const esisteGia = Object.values(savedMacchinari).some(m => m.nome === nome);
+  if (esisteGia) {
+    alert(`Macchinario "${nome}" già presente.`);
+    return;
+  }
+
+  const id = Date.now().toString();
+  savedMacchinari[id] = { nome, note: [], expanded: false };
+  localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
   renderMacchinari(id);
 }
 
-document.getElementById("create-macchinario").addEventListener("click", creaMacchinarioManuale);
-
-// All'avvio: chiudo tutto
-Object.values(savedMacchinari).forEach(macch => macch.expanded = false);
-localStorage.setItem("macchinari", JSON.stringify(savedMacchinari));
-
-// MOSTRO L'ANNO CARTELLA APPENA PARTE
-mostraAnnoCartella();
-
-renderMacchinari();
+window.addEventListener("DOMContentLoaded", () => {
+  renderMacchinari();
+  mostraAnnoCartella();
+});

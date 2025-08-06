@@ -43,19 +43,105 @@ h2 {
 #buttons-container {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
+  gap: 8px;
+  flex-wrap: nowrap;
   align-items: center;
   margin-bottom: 25px;
-  max-width: 400px;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
   position: relative;
+  overflow-x: auto;
+  padding: 0 5px;
 }
 
 .row-btns {
   display: flex;
-  gap: 15px;
+  gap: 8px;
+  flex-wrap: nowrap;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Bottoni home, crea, avvia, chiudi più piccoli e affiancati */
+
+#btn-home {
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  border-radius: 5px;
+  border: 1px solid black;
+  min-width: 65px;
+  max-width: 90px;
+  font-size: 12px;
+  padding: 5px 8px;
+  white-space: nowrap;
+  user-select: none;
+}
+
+#btn-home:hover {
+  background-color: #ffffff7e;
+}
+
+#create-macchinario {
+  order: 1;
+  border: 1px solid black !important;
+  background-color: #3498db;
+  color: white;
+  padding: 5px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+  min-width: 65px;
+  max-width: 90px;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+  margin: 0 auto;
+  white-space: nowrap;
+}
+
+#start-scan {
+  font-size: 12px;
+  padding: 5px 8px;
+  min-width: 65px;
+  max-width: 90px;
+  height: 32px;
+  box-sizing: border-box;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #2ecc71;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+#start-scan:hover {
+  background-color: #27ae60;
+}
+
+#stop-scan {
+  font-size: 12px;
+  padding: 5px 8px;
+  min-width: 65px;
+  max-width: 90px;
+  height: 32px;
+  box-sizing: border-box;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #e74c3c;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+#stop-scan:hover:not(:disabled) {
+  background-color: #c0392b;
+}
+
+#stop-scan:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 /* Fix visivo per centrare il bottone Crea */
@@ -206,6 +292,7 @@ button {
 .btn-orange {
   background-color: orange;
   color: white;
+  border: 1px solid black;
 }
 
 .btn-orange:hover {

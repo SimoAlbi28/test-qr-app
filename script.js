@@ -12,51 +12,17 @@ const btnConferma = document.getElementById("btnConferma");
 const btnAnnulla = document.getElementById("btnAnnulla");
 const erroreNome = document.getElementById("erroreNome");
 
-//-------------------------------------------------------------------------------------------------//
 const urlParams = new URLSearchParams(window.location.search);
-let currentAnno = urlParams.get("id");
+const currentAnno = urlParams.get("id");
 
 let folders = JSON.parse(localStorage.getItem("folders") || "{}");
 
-function salvaFolders() {
-  localStorage.setItem("folders", JSON.stringify(folders));
-}
-
-function creaCartellaDaPrompt() {
-  const nome = prompt("⚙️ Inserisci il nome della nuova cartella per le vecchie manutenzioni:");
-  if (!nome) {
-    alert("❌ Nome non valido. Verrai reindirizzato alla home.");
-    window.location.href = "home.html";
-    return;
-  }
-
-  const id = nome.toUpperCase();
-  if (folders[id]) {
-    alert("❌ Una cartella con questo nome esiste già. Ritorno alla home.");
-    window.location.href = "home.html";
-    return;
-  }
-
-  // Importa i vecchi macchinari salvati fuori da folders
-  const macchinariVecchi = JSON.parse(localStorage.getItem("macchinari") || "{}");
-
-  folders[id] = { macchinari: macchinariVecchi };
-  salvaFolders();
-
-  // Pulisce il vecchio localStorage
-  localStorage.removeItem("macchinari");
-
-  // Redirect con nuovo id (corretto con backtick)
-  window.location.href = `index.html?id=${id}`;
-}
-
-// Se la cartella non esiste, chiedi di crearla
+// Se la cartella non esiste, blocca e torna alla home
 if (!currentAnno || !folders[currentAnno]) {
-  creaCartellaDaPrompt();
-  throw new Error("⛔ Interrotto: cartella non trovata");
+  alert("Cartella non trovata. Torna alla home.");
+  window.location.href = "home.html";
 }
 
-// Continua normalmente con l’app
 let savedMacchinari = folders[currentAnno]?.macchinari || {};
 if (!savedMacchinari) savedMacchinari = {};
 
@@ -66,9 +32,7 @@ Object.entries(savedMacchinari).forEach(([id, macch]) => {
 });
 
 folders[currentAnno].macchinari = savedMacchinari;
-salvaFolders();
-
-//-------------------------------------------------------------------------------------------------//
+localStorage.setItem("folders", JSON.stringify(folders));
 
 // --- MOSTRA ANNO SOTTO TITOLO ---
 function mostraAnnoCartella() {

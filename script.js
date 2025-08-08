@@ -471,6 +471,23 @@ function modificaNota(id, index) {
   const nota = savedMacchinari[id].note[index];
   if (!nota) return;
 
+  // Se stai già modificando questa nota → annulla modifica (toggle OFF)
+  if (notaInModifica && notaInModifica.id === id && notaInModifica.index === index) {
+    const box = document.querySelector(`.macchinario[data-id="${id}"]`);
+    if (!box) return;
+
+    const dataInput = box.querySelector(`#data-${id}`);
+    const descInput = box.querySelector(`#desc-${id}`);
+
+    // Svuota gli input
+    dataInput.value = "";
+    descInput.value = "";
+
+    notaInModifica = null;
+    return;
+  }
+
+  // Altrimenti, attiva la modifica per questa nota (toggle ON)
   notaInModifica = { id, index };
 
   const box = document.querySelector(`.macchinario[data-id="${id}"]`);

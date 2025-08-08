@@ -822,24 +822,11 @@ button {
 }
 
 
+/* container che li contiene */
 .nome-e-btn {
-  display: flex;
-  gap: 6px;
-  flex-wrap: nowrap;
-  justify-content: center;
-  overflow-x: auto;
-  padding: 0 6px;
+  overflow-x: auto; /* scroll orizzontale se serve */
+  -webkit-overflow-scrolling: touch; /* scroll fluido su iOS */
+  max-width: 100%; 
+  padding: 0 6px; /* piccolo padding interno */
   box-sizing: border-box;
 }
-
-.nome-e-btn button {
-  flex: 0 0 auto;          /* niente crescita, niente restringimento */
-  width: auto !important;  /* larghezza naturale */
-  min-width: auto !important;
-  max-width: none !important;
-  padding: 2px 6px !important;
-  white-space: nowrap;
-  box-sizing: border-box;
-}
-
-

@@ -810,20 +810,32 @@ button {
 .btn-rinomina,
 .btn-chiudi,
 .btn-elimina-macchinario {
-  min-width: 80px;      /* più piccoli */
-  max-width: 90px;
-  padding: 4px 6px;     /* meno padding */
-  font-size: 12px;      /* testo più piccolo */
-  border-radius: 5px;
+  min-width: 60px;       /* più stretti */
+  max-width: 70px;
+  padding: 3px 5px;      /* meno padding */
+  font-size: 10px;       /* testo più piccolo */
+  border-radius: 4px;
   border: 1px solid black;
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
-  margin-right: 6px;    /* spazio tra bottoni */
+  margin-right: 4px;     /* meno margine */
   box-sizing: border-box;
   display: inline-block;
   text-align: center;
   vertical-align: middle;
+}
+
+@media (max-width: 480px) {
+  .btn-rinomina,
+  .btn-chiudi,
+  .btn-elimina-macchinario {
+    min-width: 50px;
+    max-width: 65px;
+    padding: 2px 4px;
+    font-size: 9px;
+    margin-right: 3px;
+  }
 }
 
 /* container che li contiene */

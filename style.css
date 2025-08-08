@@ -808,24 +808,56 @@ button {
 }
 
 
-.btn-rinomina,
-.btn-chiudi,
-.btn-elimina-macchinario {
-  flex-shrink: 1;    /* si riducono se serve */
-  min-width: 45px;   /* larghezza minima molto bassa */
-  max-width: 65px;
-  padding: 2px 4px;
-  font-size: 10px;
-  margin-right: 4px;
-  white-space: nowrap;
-  box-sizing: border-box;
-}
 
 .btn-rinomina,
 .btn-chiudi,
 .btn-elimina-macchinario {
+  flex-shrink: 1;
+  min-width: 45px;
+  max-width: 65px;
+  padding: 2px 4px;
+  font-size: 10px;
+  white-space: nowrap;
+  margin-right: 4px;
+  box-sizing: border-box;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.btn-rinomina.btn-blue {
+  background-color: #3498db;
+  color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.btn-rinomina.btn-blue:hover {
+  background-color: #2980b9;
+  cursor: pointer;
+}
+
+.btn-chiudi.btn-orange {
+  background-color: orange;
+  color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.btn-chiudi.btn-orange:hover {
+  background-color: darkorange;
+  cursor: pointer;
+}
+
+.btn-elimina-macchinario.btn-red {
+  background-color: #e74c3c;
+  color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.btn-elimina-macchinario.btn-red:hover {
+  background-color: #c0392b;
+  cursor: pointer;
 }
 
 @media (max-width: 480px) {
@@ -845,6 +877,9 @@ button {
   overflow-x: auto; /* scroll orizzontale se serve */
   -webkit-overflow-scrolling: touch; /* scroll fluido su iOS */
   max-width: 100%; 
-  padding: 0 6px; /* piccolo padding interno */
+  padding: 0 6px;
   box-sizing: border-box;
+  display: flex;
+  gap: 6px;
+  align-items: center;
 }

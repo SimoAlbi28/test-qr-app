@@ -46,7 +46,7 @@ function creaCartellaDaPrompt() {
   // Pulisce il vecchio localStorage
   localStorage.removeItem("macchinari");
 
-  // Redirect con nuovo id
+  // Redirect con nuovo id (corretto con backtick)
   window.location.href = `index.html?id=${id}`;
 }
 
@@ -67,6 +67,7 @@ Object.entries(savedMacchinari).forEach(([id, macch]) => {
 
 folders[currentAnno].macchinari = savedMacchinari;
 salvaFolders();
+
 //-------------------------------------------------------------------------------------------------//
 
 // --- MOSTRA ANNO SOTTO TITOLO ---

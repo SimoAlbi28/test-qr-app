@@ -807,9 +807,9 @@ button {
   box-sizing: border-box;
 }
 
-.btn-orange,
-.btn-blue,
-.btn-red {
+.btn-rinomina,
+.btn-chiudi,
+.btn-elimina-macchinario {
   padding: 0;               /* niente padding */
   width: auto;              /* larghezza esatta testo */
   min-width: 0;             /* niente larghezza minima */
@@ -832,13 +832,13 @@ button {
   box-sizing: border-box;
 }
 
-/* override bottoni per larghezza adattativa */
 .nome-e-btn button {
-  min-width: auto !important;    /* togli min-width fissa */
-  max-width: none !important;    /* togli max-width fissa */
-  padding: 2px 6px !important;   /* padding stretto orizzontale */
-  white-space: nowrap;           /* no a capo testo */
-  flex-shrink: 0;                /* non si restringono troppo */
+  flex: 0 0 auto;          /* niente crescita, niente restringimento */
+  width: auto !important;  /* larghezza naturale */
+  min-width: auto !important;
+  max-width: none !important;
+  padding: 2px 6px !important;
+  white-space: nowrap;
   box-sizing: border-box;
 }
 

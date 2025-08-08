@@ -807,23 +807,25 @@ button {
   box-sizing: border-box;
 }
 
+
 .btn-rinomina,
 .btn-chiudi,
 .btn-elimina-macchinario {
-  min-width: 60px;       /* più stretti */
-  max-width: 70px;
-  padding: 3px 5px;      /* meno padding */
-  font-size: 10px;       /* testo più piccolo */
-  border-radius: 4px;
-  border: 1px solid black;
-  cursor: pointer;
-  user-select: none;
+  flex-shrink: 1;    /* si riducono se serve */
+  min-width: 45px;   /* larghezza minima molto bassa */
+  max-width: 65px;
+  padding: 2px 4px;
+  font-size: 10px;
+  margin-right: 4px;
   white-space: nowrap;
-  margin-right: 4px;     /* meno margine */
   box-sizing: border-box;
-  display: inline-block;
-  text-align: center;
-  vertical-align: middle;
+}
+
+.btn-rinomina,
+.btn-chiudi,
+.btn-elimina-macchinario {
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 @media (max-width: 480px) {
@@ -840,9 +842,9 @@ button {
 
 /* container che li contiene */
 .nome-e-btn {
-  display: flex;
-  justify-content: center;
-  gap: 6px; /* distanza tra i btn */
-  flex-wrap: nowrap; /* non andare a capo */
-  align-items: center;
+  overflow-x: auto; /* scroll orizzontale se serve */
+  -webkit-overflow-scrolling: touch; /* scroll fluido su iOS */
+  max-width: 100%; 
+  padding: 0 6px; /* piccolo padding interno */
+  box-sizing: border-box;
 }

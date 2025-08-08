@@ -807,9 +807,9 @@ button {
   box-sizing: border-box;
 }
 
-.btn-rinomina,
-.btn-chiudi,
-.btn-elimina-macchinario {
+.btn-orange,
+.btn-blue,
+.btn-red {
   padding: 0;               /* niente padding */
   width: auto;              /* larghezza esatta testo */
   min-width: 0;             /* niente larghezza minima */

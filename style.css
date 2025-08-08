@@ -824,9 +824,12 @@ button {
 
 /* container che li contiene */
 .nome-e-btn {
-  overflow-x: auto; /* scroll orizzontale se serve */
-  -webkit-overflow-scrolling: touch; /* scroll fluido su iOS */
-  max-width: 100%; 
-  padding: 0 6px; /* piccolo padding interno */
+  display: flex;
+  gap: 8px;          /* spazio tra i bottoni */
+  flex-wrap: nowrap;  /* niente a capo */
+  justify-content: center; /* centrati orizzontalmente */
+  overflow-x: auto;  /* scroll orizzontale se serve */
+  padding: 0 6px;
   box-sizing: border-box;
 }
+

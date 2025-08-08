@@ -12,17 +12,75 @@ const btnConferma = document.getElementById("btnConferma");
 const btnAnnulla = document.getElementById("btnAnnulla");
 const erroreNome = document.getElementById("erroreNome");
 
+//-------------------------------------------------------------------------------------------------//
 const urlParams = new URLSearchParams(window.location.search);
-const currentAnno = urlParams.get("id");
+let currentAnno = urlParams.get("id");
 
 let folders = JSON.parse(localStorage.getItem("folders") || "{}");
 
-// Se la cartella non esiste, blocca e torna alla home
-if (!currentAnno || !folders[currentAnno]) {
-  alert("Cartella non trovata. Torna alla home.");
-  window.location.href = "home.html";
+// Funzione per salvare folders
+function salvaFolders() {
+  localStorage.setItem("folders", JSON.stringify(folders));
 }
 
+// Funzione per creare cartella nuova
+function creaCartella(nome) {
+  const id = nome.toUpperCase().trim();
+  if (!id) return false;
+  if (folders[id]) {
+    alert("Cartella già esistente");
+    return false;
+  }
+  folders[id] = { macchinari: {} };
+  salvaFolders();
+  currentAnno = id;
+  window.location.href = `index.html?id=${id}`;
+  return true;
+}
+
+// Funzione per chiedere se creare o no
+function confermaCreaCartella() {
+  const nome = prompt("Inserisci il nome della nuova cartella per le tue vecchie manutenzioni:");
+  if (!nome) {
+    alert("Nome non valido");
+    return;
+  }
+  if (creaCartella(nome)) {
+    alert("Cartella creata e aperta.");
+  }
+}
+
+// Funzione per eliminare la cartella attuale
+function confermaEliminaCartella() {
+  if (!currentAnno || !folders[currentAnno]) {
+    alert("Nessuna cartella da eliminare");
+    return;
+  }
+  const ok = confirm("Sei sicuro di voler eliminare questa cartella? NON potrai recuperarla.");
+  if (ok) {
+    delete folders[currentAnno];
+    salvaFolders();
+    alert("Cartella eliminata. Torni alla home.");
+    window.location.href = "home.html";
+  }
+}
+
+// Se la cartella non esiste, chiedi all’utente cosa fare
+if (!currentAnno || !folders[currentAnno]) {
+  const crea = confirm("Cartella non trovata. Vuoi crearla?");
+  if (crea) {
+    confermaCreaCartella();
+  } else {
+    const elimina = confirm("Vuoi eliminarla? Non sarà più recuperabile.");
+    if (elimina) {
+      confermaEliminaCartella();
+    } else {
+      window.location.href = "home.html";
+    }
+  }
+}
+
+// Dopo che la cartella è confermata:
 let savedMacchinari = folders[currentAnno]?.macchinari || {};
 if (!savedMacchinari) savedMacchinari = {};
 
@@ -32,8 +90,8 @@ Object.entries(savedMacchinari).forEach(([id, macch]) => {
 });
 
 folders[currentAnno].macchinari = savedMacchinari;
-localStorage.setItem("folders", JSON.stringify(folders));
-
+salvaFolders();
+//-------------------------------------------------------------------------------------------------//
 // --- MOSTRA ANNO SOTTO TITOLO ---
 function mostraAnnoCartella() {
   const titoloTop = document.getElementById("titleTop");

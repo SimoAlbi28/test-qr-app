@@ -114,7 +114,7 @@ function copiaTuttoCartella(id) {
   }
 
   if (Object.keys(macchinari).length === 0) {
-    testo += "(Nessun macchinario presente)\n";
+    testo += "(Cartella vuota !)\n";
   } else {
     Object.values(macchinari).forEach((macchinario, i) => {
       if (i > 0) testo += "\n"; // Riga vuota sopra per staccare manutenzioni

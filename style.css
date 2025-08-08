@@ -818,11 +818,7 @@ button {
   box-sizing: border-box;
 }
 
-/* container che li contiene */
 .nome-e-btn {
-  overflow-x: auto; /* scroll orizzontale se serve */
-  -webkit-overflow-scrolling: touch; /* scroll fluido su iOS */
-  max-width: 100%; 
-  padding: 0 6px; /* piccolo padding interno */
-  box-sizing: border-box;
+  gap: 15px;
+  align-items: center;
 }

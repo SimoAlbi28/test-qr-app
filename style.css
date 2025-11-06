@@ -251,6 +251,21 @@ button {
   box-sizing: border-box;
 }
 
+.note-form textarea {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  margin: 0 auto;
+  text-align: left;
+  resize: vertical;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
 .btns-note,
 #buttons-container,
 .nome-e-btn {

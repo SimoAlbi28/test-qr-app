@@ -300,7 +300,7 @@ function renderMacchinari(highlightId = null) {
         <label>Data:</label>
         <input type="date" id="data-${id}">
         <label>Descrizione (max 300):</label>
-        <input type="text" id="desc-${id}" maxlength="300">
+        <textarea id="desc-${id}" maxlength="300" rows="3" style="resize: none; width: 100%;"></textarea>
         <div style="text-align:center; margin-top:10px;">
           <button class="btn-green" id="btn-conferma-${id}">Conferma</button>
         </div>
@@ -494,10 +494,22 @@ function modificaNota(id, index) {
   if (!box) return;
 
   const dataInput = box.querySelector(`#data-${id}`);
+
+  // 🔥 sostituisci l’input descrizione con un textarea autosize
   const descInput = box.querySelector(`#desc-${id}`);
+  descInput.value = nota.desc;
+
+  descInput.style.height = "auto";
+  descInput.style.overflow = "hidden";
+  descInput.style.resize = "none";
+  descInput.style.height = descInput.scrollHeight + "px";
+
+  descInput.addEventListener("input", () => {
+    descInput.style.height = "auto";
+    descInput.style.height = descInput.scrollHeight + "px";
+  });
 
   dataInput.value = nota.data;
-  descInput.value = nota.desc;
 }
 
 function eliminaNota(id, index) {

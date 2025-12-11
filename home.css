@@ -128,11 +128,6 @@ h1 {
   border: 1px solid black;
 }
 
-/* Hover effetto più scuro */
-.btns button:hover {
-  filter: brightness(0.85);
-}
-
 /* Pulsante nuova cartella */
 #btn-add-folder {
   background: #00d9ff;
